@@ -20,10 +20,12 @@ public class MainController implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		view.subir(2);
-		view.bajar(2);
-		view.moverDisco(new Movimiento(2,1,1));
-		view.drawTowers();
+		if(view.subir(2)) {
+			return;
+		}
+		if(view.moverDisco(new Movimiento(2,0,1)))
+			return;
+		view.bajar(new Movimiento(2,0,1));
 	}
 
 }

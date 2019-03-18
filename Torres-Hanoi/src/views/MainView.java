@@ -4,9 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import controller.MainController;
-import models.Disco;
-import models.Movimiento;
-
+import models.*;
 public class MainView extends JFrame {
 	
 	Graphics g;
@@ -14,7 +12,9 @@ public class MainView extends JFrame {
 	int nDiscos;
 	private static final Color[] COLORS = {Color.RED,Color.green,Color.blue,Color.CYAN,Color.YELLOW};
 	private Disco[] discos;
+	private Torre[] torres = {new Torre(20,250,0),new Torre(140,250,0),new Torre(260,250,0)};
 	private Timer timer;
+	private boolean isGoingDown = false;
 	private MainController controller;
 	
 	public MainView() {
@@ -57,7 +57,6 @@ public class MainView extends JFrame {
 	private void initializaDiscos() {
 		int tamaño = 90, yAxis = 240,xAxis = 25;
 		for(int i = 0; i < nDiscos; i++) {
-			g.setColor(COLORS[i]);
 			discos[i] = new Disco(xAxis,yAxis,tamaño,10);
 			g.fillRect(discos[i].getxPosition(),discos[i].getyPosition(),discos[i].getWidth(),discos[i].getHeigth());
 			tamaño -= 10;
@@ -66,33 +65,51 @@ public class MainView extends JFrame {
 		}
 	}
 	
-	public void moverDisco(Movimiento movimiento) {
+	
+	public boolean moverDisco(Movimiento movimiento) {
 		int torreInicio = movimiento.getTorreInicio(), 
 				torreDestino = movimiento.getTorreDestino(),
 				disco = movimiento.getDisco();
-		if(torreInicio == 1 && torreDestino == 2) {
+		if(discos[disco].getxPosition() == torres[torreDestino].getxPosition()+10)
+			return false;
+		
+		if(torres[torreInicio].getxPosition() < torres[torreDestino].getxPosition()) {
 			discos[disco].setxPosition(discos[disco].getxPosition()+5);
+			drawTowers();
+			return true;
 		}
+		
+		discos[disco].setxPosition(discos[disco].getxPosition()-5);
+		drawTowers();
+		return true;
 	}
 	
-	public void subir(int disco) {
+	public boolean subir(int disco) {
 		super.paint(g);
-		if(discos[disco].getyPosition() > 40) {
+		if(discos[disco].getyPosition() > 40 && !isGoingDown) {
 			discos[disco].setyPosition(discos[disco].getyPosition() -5);
-			repaint();
+			drawTowers();
+			return true;
 		}
+		return false;
 	}
 	
-	public void bajar(int disco) {
+	public boolean bajar(Movimiento movimiento) {
 		super.paint(g);
-		if(discos[disco].getyPosition() > 40) {
+		int disco = movimiento.getDisco(),torreDestino = movimiento.getTorreDestino(),
+				posFinal = 235 - (torres[torreDestino].getDiscos() * 10);
+		if(discos[disco].getyPosition() <= posFinal) {
+			isGoingDown = true;
 			discos[disco].setyPosition(discos[disco].getyPosition() +5);
-			repaint();
+			drawTowers();
+			return true;
 		}
+		isGoingDown = false;
+		return false;
 	}
 	
 	public void start() {
-		setVisible(true);
+		repaint();
 	}
 	
 	public void setController(MainController controller) {
