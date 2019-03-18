@@ -2,6 +2,7 @@ package views;
 
 import java.awt.*;
 import java.util.Vector;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -12,7 +13,7 @@ public class MainView extends JFrame {
 	private Graphics g;
 	private Image backbuffer = null;
 	private int nDiscos;
-	private static final Color[] COLORS = {Color.RED,Color.green,Color.blue,Color.CYAN,Color.YELLOW};
+	private static final Color[] COLORS = {Color.RED,Color.green,Color.blue,Color.CYAN,Color.YELLOW,Color.ORANGE, Color.PINK,Color.WHITE};
 	private Disco[] discos;
 	private Torre[] torres = {new Torre(20,250,0),new Torre(140,250,0),new Torre(260,250,0)};
 	private Timer timer;
@@ -29,7 +30,7 @@ public class MainView extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		numberMovement = 0;
-		nDiscos = 3;
+		nDiscos = new Random().nextInt(7)+1;
 		discos = new Disco[nDiscos];
 		setVisible(true);
 		backbuffer = createImage(getWidth(), getHeight());
@@ -69,7 +70,7 @@ public class MainView extends JFrame {
 			yAxis -= 10;
 			xAxis += 5;
 		}
-		torres[0].setDiscos(3);
+		torres[0].setDiscos(nDiscos);
 	}
 	
 	
@@ -77,7 +78,7 @@ public class MainView extends JFrame {
 		int torreInicio = movimiento.getTorreInicio(), 
 				torreDestino = movimiento.getTorreDestino(),
 				disco = movimiento.getDisco()-1,
-				aux = 15 - (disco * 5);
+				aux = (nDiscos*5) - (disco * 5);
 		if(discos[disco].getxPosition() == torres[torreDestino].getxPosition()+aux)
 			return false;
 		
@@ -155,5 +156,9 @@ public class MainView extends JFrame {
 
 	public Movimiento getCurrentMovement() {
 		return currentMovement;
+	}
+
+	public int getnDiscos() {
+		return nDiscos;
 	}
 }

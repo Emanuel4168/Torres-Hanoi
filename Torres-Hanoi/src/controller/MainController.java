@@ -21,7 +21,7 @@ public class MainController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(view.getMovements() == null) {
-			model.solveTowers(3, 0, 1, 2);
+			model.solveTowers(view.getnDiscos(), 0, 1, 2);
 			view.setMovements(model.getMovements());
 			return;
 		}
