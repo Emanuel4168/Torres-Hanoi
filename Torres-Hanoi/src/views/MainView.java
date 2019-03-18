@@ -67,13 +67,28 @@ public class MainView extends JFrame {
 	}
 	
 	public void moverDisco(Movimiento movimiento) {
+		int torreInicio = movimiento.getTorreInicio(), 
+				torreDestino = movimiento.getTorreDestino(),
+				disco = movimiento.getDisco();
+		if(torreInicio == 1 && torreDestino == 2) {
+			discos[disco].setxPosition(discos[disco].getxPosition()+5);
+		}
+	}
+	
+	public void subir(int disco) {
 		super.paint(g);
-		int noDisco = movimiento.getDisco();
-		while(discos[noDisco].getyPosition() > 40) {
-			discos[noDisco].setyPosition(discos[noDisco].getyPosition() -5);
+		if(discos[disco].getyPosition() > 40) {
+			discos[disco].setyPosition(discos[disco].getyPosition() -5);
 			repaint();
 		}
+	}
 	
+	public void bajar(int disco) {
+		super.paint(g);
+		if(discos[disco].getyPosition() > 40) {
+			discos[disco].setyPosition(discos[disco].getyPosition() +5);
+			repaint();
+		}
 	}
 	
 	public void start() {
@@ -82,7 +97,7 @@ public class MainView extends JFrame {
 	
 	public void setController(MainController controller) {
 		this.controller = controller;
-		timer = new Timer(400,controller);
+		timer = new Timer(100,controller);
 		timer.start();
 	}
 }
