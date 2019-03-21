@@ -17,7 +17,7 @@ public class MainView extends JFrame {
 	private Disco[] discos;
 	private Torre[] torres = {new Torre(20,250,0),new Torre(140,250,0),new Torre(260,250,0)};
 	private Timer timer;
-	private boolean isGoingDown = false, substractOance = false, addOance = false;
+	private boolean isGoingDown = false; //substractOance = false, addOance = false;
 	private MainController controller;
 	private Vector<Movimiento> movements;
 	private Movimiento currentMovement;
@@ -102,17 +102,18 @@ public class MainView extends JFrame {
 			drawTowers();
 			return true;
 		}
-		if(!substractOance) {
-			torres[torreInicio].setDiscos(torres[torreInicio].getDiscos() -1);
-			System.out.println(torres[torreInicio].getDiscos());
-			substractOance = true;
-		}
+//		if(!substractOance) {
+//			torres[torreInicio].setDiscos(torres[torreInicio].getDiscos() -1);
+//			System.out.println(torres[torreInicio].getDiscos());
+//			substractOance = true;
+//		}
 		return false;
 	}
 	
 	public boolean bajar(Movimiento movimiento) {
 		super.paint(g);
 		int disco = movimiento.getDisco()-1,torreDestino = movimiento.getTorreDestino(),
+				torreInicio = movimiento.getTorreInicio(),
 				posFinal = 235 - (torres[torreDestino].getDiscos() * 10);
 
 		if(discos[disco].getyPosition() <= posFinal) {
@@ -127,9 +128,10 @@ public class MainView extends JFrame {
 			return false;
 		}
 		torres[torreDestino].setDiscos(torres[torreDestino].getDiscos() + 1);
+		torres[torreInicio].setDiscos(torres[torreInicio].getDiscos() -1);
 		currentMovement = movements.get(numberMovement);
 		isGoingDown = false;
-		substractOance = false;
+//		substractOance = false;
 //		System.out.println(torres[torreDestino].getDiscos());
 		return false;
 	}
@@ -140,7 +142,7 @@ public class MainView extends JFrame {
 	
 	public void setController(MainController controller) {
 		this.controller = controller;
-		timer = new Timer(100,controller);
+		timer = new Timer(50,controller);
 		timer.start();
 	}
 
